@@ -18,8 +18,8 @@ const Navbar = ({ setIsAuthenticated }) => {
     return (
         <nav className="navbar">
             <div className="navbar-links">
-                <NavLink to="/leave-request" className="nav-link" activeClassName="active">Leave Request</NavLink>
                 <NavLink to="/timesheet" className="nav-link" activeClassName="active">Timesheet</NavLink>
+                <NavLink to="/leave-request" className="nav-link" activeClassName="active">Leave Request</NavLink>
                 <NavLink to="/holidays" className="nav-link" activeClassName="active">Holidays</NavLink>
                 <NavLink to="/rules" className="nav-link" activeClassName="active">Rules & Regulations</NavLink>
                 <NavLink to="/leave-approval" className="nav-link" activeClassName="active">Leave Approval</NavLink>

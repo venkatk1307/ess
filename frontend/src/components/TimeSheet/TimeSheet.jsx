@@ -42,19 +42,6 @@ const Timesheet = () => {
     return (
         <div className="timesheet-content">
             {/* Add New Entry Button and Leave Statistics */}
-            <div className="timesheet-stats">
-                <button className="add-entry-button">Add New Entry</button>
-                <div className="leave-stats">
-                    <div className="leave-stat">
-                        <p>Casual leaves took in this month</p>
-                        <span>01</span>
-                    </div>
-                    <div className="leave-stat">
-                        <p>Sick leaves took in this month</p>
-                        <span>00</span>
-                    </div>
-                </div>
-            </div>
 
             {/* Project Selection */}
             <div className="project-selection">

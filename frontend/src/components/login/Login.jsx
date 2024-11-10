@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './Login.css';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+// In index.js or App.js
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Login = ({ setIsAuthenticated }) => {
     const [email, setEmail] = useState('');
@@ -23,7 +25,7 @@ const Login = ({ setIsAuthenticated }) => {
 
         try {
             // Attempt to login
-            const response = await axios.post('http://localhost:8081/login', loginData);
+            const response = await axios.post('http://localhost:8081/api/auth/login', loginData); // Correct URL
 
             // If login is successful (status 200)
             if (response.status === 200) {
@@ -48,7 +50,7 @@ const Login = ({ setIsAuthenticated }) => {
             <form className="login-form" onSubmit={handleSubmit}>
                 <div className="input-wrapper">
                     {/* Email Icon */}
-                    <i className="fas fa-envelope"></i>
+                    <i className="fa-regular fa-envelope"></i>
                     <input
                         type="email"
                         id="email"
