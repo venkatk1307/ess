@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Navbar from './components/Nav/navbar';
 import Login from './components/login/Login';
@@ -20,6 +20,14 @@ const ProtectedRoute = ({ children, isAuthenticated, setIsAuthenticated }) => {
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Check localStorage for the authentication status on page load
+  useEffect(() => {
+    const token = localStorage.getItem('token'); // Check if there's a token in localStorage
+    if (token) {
+      setIsAuthenticated(true); // Set to true if a token exists
+    }
+  }, []);
 
   return (
     <Router>

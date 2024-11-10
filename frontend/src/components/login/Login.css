@@ -13,7 +13,8 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: #ffffff;
+    background: #f4f4f4;
+    /* Slightly off-white for the background */
 }
 
 #root {
@@ -24,9 +25,7 @@ body {
 .login-container {
     margin: 0 auto;
     max-width: 410px;
-    /* Maximum width for larger screens */
     width: 90%;
-    /* Responsive width for smaller screens */
     padding: 2rem 1.5rem;
     border-radius: 0.5rem;
     background: #fff;
@@ -35,10 +34,11 @@ body {
 
 .login-container .form-title {
     text-align: center;
-    font-size: 1.37rem;
+    font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 1.87rem;
-    color: #000;
+    color: #333;
+    /* Darker text for title */
 }
 
 .login-form .input-wrapper {
@@ -48,16 +48,26 @@ body {
     margin-bottom: 1.5rem;
 }
 
+.login-form .input-wrapper i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #c87b7e;
+    font-size: 1.2rem;
+}
+
 .login-form .input-field {
     width: 100%;
     height: 100%;
     outline: none;
-    font-size: 1.06rem;
-    color: #000;
-    background-color: #fff;
+    font-size: 1rem;
+    color: #333;
+    background-color: #f9f9f9;
     border-radius: 0.31rem;
     border: 1px solid #c87b7e;
-    padding: 0px 1.25rem 0 3.12rem;
+    padding: 0px 1.25rem 0 2.75rem;
+    /* Adjust padding for the icon */
     transition: 0.2s ease;
 }
 
@@ -69,42 +79,8 @@ body {
     color: #c87b7e;
 }
 
-.login-form .input-wrapper i {
-    position: absolute;
-    top: 50%;
-    height: 100%;
-    display: flex;
-    color: #c87b7e;
-    align-items: center;
-    transform: translateY(-50%);
-}
-
-.login-form .input-wrapper i:not(.eye-icon) {
-    left: 0.93rem;
-    /* Adjusted left spacing */
-}
-
-.login-form .input-field:focus~i:not(.eye-icon) {
-    color: #ff232c;
-    /* Change icon color on focus */
-}
-
-.login-form .input-wrapper i.eye-icon {
-    display: none;
-    /* Initially hidden */
-    right: 0.93rem;
-    /* Adjusted right spacing */
-}
-
-.login-form .input-wrapper .input-field:valid~.eye-icon {
-    display: flex;
-    /* Show eye icon when input is valid */
-}
-
 .login-form .forgot-pass-link {
     display: block;
-    /* Ensure it's block level for better touch targets */
-    width: fit-content;
     margin-top: -0.44rem;
 }
 
@@ -125,7 +101,6 @@ body {
 
 .login-form .login-button:hover {
     background-color: #d81b24;
-    /* Darker shade on hover */
 }
 
 .login-status {
@@ -153,9 +128,7 @@ input:-webkit-autofill:focus {
     -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
     box-shadow: 0 0 0px 1000px #fff inset !important;
     -webkit-text-fill-color: #000 !important;
-    /* Optional: Change text color if needed */
 }
-
 
 /* Responsive Styles */
 @media (max-width: 600px) {
@@ -171,11 +144,9 @@ input:-webkit-autofill:focus {
     .login-form .input-field,
     .login-form .login-button {
         font-size: 1rem;
-        /* Reduce font size for smaller screens */
     }
 
     .login-status {
         font-size: 0.9rem;
-        /* Smaller font for status messages */
     }
 }

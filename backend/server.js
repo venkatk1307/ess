@@ -1,42 +1,59 @@
 const express = require('express');
-const XLSX = require('xlsx');
-const cors = require('cors');
-const path = require('path');
-
 const app = express();
-app.use(cors());
-app.use(express.json());
+const cors = require('cors'); // Import cors
+const bodyParser = require('body-parser');
+const mysql = require('mysql');
 
-const PORT = 3001;
+// Use CORS middleware
+app.use(cors());  // This enables CORS for all routes and origins
 
-function readExcelFile() {
-    const workbook = XLSX.readFile(path.join('D:', 'Login_details.xlsx'));
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    return XLSX.utils.sheet_to_json(sheet);
-}
+// Use body-parser to parse JSON request bodies
+app.use(bodyParser.json());
 
-app.post('/api/login', (req, res) => {
-    const { email, password } = req.body;
+// MySQL database connection
+const db = mysql.createConnection({
+    host: '127.0.0.1',
+    user: 'root',
+    password: 'root',
+    database: 'ess_project',
+});
 
-    const loginData = readExcelFile();
-
-    // console.log('Login attempt:', email, password);
-    // console.log('Available credentials:', loginData);
-
-    const user = loginData.find(user =>
-        user.Email.trim().toLowerCase() === email.trim().toLowerCase() &&
-        user.Password.trim() === password.trim()
-    );
-
-    if (user) {
-        console.log('Login successful for:', email);
-        res.json({ success: true, message: 'Login successful' });
+db.connect((err) => {
+    if (err) {
+        console.error('Could not connect to MySQL', err);
     } else {
-        console.log('Login failed for:', email);
-        res.status(401).json({ success: false, message: 'Invalid email or password' });
+        console.log('Connected to the MySQL database');
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// Login route
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+
+    console.log('Login attempt for:', email);
+
+    const query = 'SELECT * FROM Master WHERE mail = ?';
+    db.query(query, [email], (err, result) => {
+        if (err) {
+            console.error('Error querying database:', err);
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+
+        if (result.length === 0) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        const user = result[0];
+
+        if (user.password !== password) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        res.status(200).json({ message: 'Login successful', user });
+    });
+});
+
+// Start the server
+app.listen(8081, () => {
+    console.log('Server is running on port 8081');
 });

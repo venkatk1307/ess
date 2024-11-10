@@ -1,108 +1,82 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './Login.css';
-import { Navigate } from 'react-router-dom';
-
-const InputField = ({ type, placeholder, icon, value, onChange, isPasswordShown, togglePasswordVisibility }) => (
-    <div className="input-wrapper">
-        <input
-            type={isPasswordShown ? 'text' : type}
-            placeholder={placeholder}
-            className="input-field"
-            required
-            value={value}
-            onChange={onChange}
-        />
-        <i className="material-symbols-outlined">{icon}</i>
-        {type === 'password' && (
-            <i onClick={togglePasswordVisibility} className="material-symbols-outlined eye-icon">
-                {isPasswordShown ? 'visibility' : 'visibility_off'}
-            </i>
-        )}
-    </div>
-);
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 
 const Login = ({ setIsAuthenticated }) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [loginStatus, setLoginStatus] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [redirect, setRedirect] = useState(false);
-    const [isPasswordShown, setIsPasswordShown] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-        setLoginStatus("");
+    const navigate = useNavigate(); // Initialize useNavigate for redirection
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        const loginData = {
+            email: email,
+            password: password,
+        };
+
+        setLoading(true); // Set loading state to true when submitting
 
         try {
-            const response = await fetch('http://localhost:3001/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
+            // Attempt to login
+            const response = await axios.post('http://localhost:8081/login', loginData);
 
-            const data = await response.json();
-
-            if (response.ok) {
-                setLoginStatus("Login successful!");
-                setIsAuthenticated(true);
-                setRedirect(true);
-                // Clear input fields after successful login
-                setEmail('');
-                setPassword('');
-            } else {
-                setLoginStatus(data.message || "Invalid email or password");
+            // If login is successful (status 200)
+            if (response.status === 200) {
+                setIsAuthenticated(true); // Set authentication status
+                navigate('/timesheet');    // Redirect to the timesheet page
             }
         } catch (error) {
-            console.error('Login error:', error);
-            setLoginStatus("An error occurred. Please try again.");
+            // Handle error based on response
+            if (error.response && error.response.status === 401) {
+                setError('Invalid email or password'); // Display error message
+            } else {
+                setError('Something went wrong, please try again'); // Display generic error message
+            }
         } finally {
-            setIsLoading(false);
+            setLoading(false); // Set loading state to false after the request completes
         }
     };
-
-    if (redirect) {
-        return <Navigate to="/" />;
-    }
 
     return (
         <div className="login-container">
             <h2 className="form-title">Login</h2>
-
-            <form className="login-form" onSubmit={handleLogin}>
-                <InputField
-                    type="email"
-                    placeholder="Email"
-                    icon="mail"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <InputField
-                    type="password"
-                    placeholder="Password"
-                    icon="lock"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    isPasswordShown={isPasswordShown}
-                    togglePasswordVisibility={() => setIsPasswordShown(prevState => !prevState)}
-                />
-                <a href="#" className="forgot-pass-link">Forgot Password?</a>
-
-                <button className="login-button" type="submit" disabled={isLoading}>
-                    {isLoading ? (
-                        <span className="spinner"></span> // Optional: Add a spinner element
-                    ) : (
-                        'Log In'
-                    )}
+            <form className="login-form" onSubmit={handleSubmit}>
+                <div className="input-wrapper">
+                    {/* Email Icon */}
+                    <i className="fas fa-envelope"></i>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="input-field"
+                    />
+                </div>
+                <div className="input-wrapper">
+                    {/* Password Icon */}
+                    <i className="fas fa-lock"></i>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="input-field"
+                    />
+                </div>
+                <button type="submit" disabled={loading} className="login-button">
+                    {loading ? 'Logging in...' : 'Login'}
                 </button>
+                {error && <div className="login-status error">{error}</div>}
             </form>
-            {loginStatus && (
-                <p className={`login-status ${loginStatus === "Login successful!" ? "success" : "error"}`}>
-                    {loginStatus}
-                </p>
-            )}
         </div>
     );
 };
