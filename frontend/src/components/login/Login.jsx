@@ -1,8 +1,9 @@
+// frontend/src/components/login/Login.jsx
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Login.css';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
-// In index.js or App.js
+import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Login = ({ setIsAuthenticated }) => {
@@ -11,7 +12,7 @@ const Login = ({ setIsAuthenticated }) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const navigate = useNavigate(); // Initialize useNavigate for redirection
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -21,26 +22,23 @@ const Login = ({ setIsAuthenticated }) => {
             password: password,
         };
 
-        setLoading(true); // Set loading state to true when submitting
+        setLoading(true);
 
         try {
-            // Attempt to login
-            const response = await axios.post('http://localhost:8081/api/auth/login', loginData); // Correct URL
+            const response = await axios.post('http://localhost:8081/api/auth/login', loginData);
 
-            // If login is successful (status 200)
             if (response.status === 200) {
-                setIsAuthenticated(true); // Set authentication status
-                navigate('/timesheet');    // Redirect to the timesheet page
+                setIsAuthenticated(true);
+                navigate('/timesheet');
             }
         } catch (error) {
-            // Handle error based on response
             if (error.response && error.response.status === 401) {
-                setError('Invalid email or password'); // Display error message
+                setError('Invalid email or password');
             } else {
-                setError('Something went wrong, please try again'); // Display generic error message
+                setError('Something went wrong, please try again');
             }
         } finally {
-            setLoading(false); // Set loading state to false after the request completes
+            setLoading(false);
         }
     };
 
@@ -49,7 +47,7 @@ const Login = ({ setIsAuthenticated }) => {
             <h2 className="form-title">Login</h2>
             <form className="login-form" onSubmit={handleSubmit}>
                 <div className="input-wrapper">
-                    {/* Email Icon */}
+
                     <i className="fa-regular fa-envelope"></i>
                     <input
                         type="email"
@@ -62,7 +60,7 @@ const Login = ({ setIsAuthenticated }) => {
                     />
                 </div>
                 <div className="input-wrapper">
-                    {/* Password Icon */}
+
                     <i className="fas fa-lock"></i>
                     <input
                         type="password"

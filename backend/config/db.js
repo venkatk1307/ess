@@ -1,3 +1,5 @@
+// config/db.js
+
 const mysql = require('mysql');
 require('dotenv').config();
 
