@@ -9,9 +9,7 @@ const LeaveRequestForm = () => {
     const [reason, setReason] = useState('');
     const [isOffDay, setIsOffDay] = useState(false);
     const [statusMessage, setStatusMessage] = useState('');
-
-    // Static employee ID, replace with dynamic value
-    const emp_id = 1;
+    const emp_id = localStorage.getItem('emp_id'); // Adjust this if it's stored somewhere else
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,13 +22,20 @@ const LeaveRequestForm = () => {
             reason
         };
 
+        const token = localStorage.getItem('authToken');
+
         try {
-            const response = await axios.post('http://localhost:8081/api/leave/request', leaveRequestData);
+            const response = await axios.post(
+                'http://localhost:8081/api/leave/request',
+                leaveRequestData,
+                { headers: { Authorization: token } }  // Send token in the headers
+            );
             setStatusMessage(response.data.message);
         } catch (error) {
             setStatusMessage('Failed to submit leave request. Please try again.');
         }
     };
+
 
     return (
         <form className="leave-request-form" onSubmit={handleSubmit}>

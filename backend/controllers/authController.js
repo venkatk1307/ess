@@ -1,5 +1,4 @@
-// controllers/authController.js
-
+const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 require('dotenv').config();
 
@@ -19,15 +18,15 @@ exports.login = (req, res) => {
             return res.status(500).json({ message: 'Internal Server Error' });
         }
 
-        if (result.length === 0) {
+        if (result.length === 0 || result[0].password !== password) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
         const user = result[0];
-        if (user.password !== password) {
-            return res.status(401).json({ message: 'Invalid email or password' });
-        }
 
-        res.status(200).json({ message: 'Login successful', user });
+        // Generate a JWT token and send it back to the frontend
+        const token = jwt.sign({ emp_id: user.emp_id, email: user.mail }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.status(200).json({ message: 'Login successful', token });
     });
 };

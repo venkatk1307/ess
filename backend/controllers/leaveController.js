@@ -1,9 +1,9 @@
-// controllers/leaveRequestController.js
-
+const authenticate = require('../middleware/authMiddleware');
 const leaveRequestModel = require('../models/leaveModel');
 
 exports.createLeaveRequest = (req, res) => {
-    const { emp_id, leaveType, from_date, to_date, reason } = req.body;
+    const { leaveType, from_date, to_date, reason } = req.body;
+    const emp_id = req.user.emp_id;  // Get emp_id from the authenticated user
 
     const leaveRequestData = {
         emp_id,
@@ -13,7 +13,6 @@ exports.createLeaveRequest = (req, res) => {
         reason_for_leave: reason
     };
 
-    // Use a callback function to handle the query result
     leaveRequestModel.createLeaveRequest(leaveRequestData, (err, result) => {
         if (err) {
             return res.status(500).json({ message: 'Failed to submit leave request' });
