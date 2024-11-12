@@ -36,7 +36,6 @@ const LeaveRequestForm = () => {
         <form className="leave-request-form" onSubmit={handleSubmit}>
             <div className="form-header">
                 <h2>Leave Request Form</h2>
-                <div className="status-message">{statusMessage}</div>
                 <div className="leave-counts">
                     <div className="leave-count casual">
                         <h3>Casual Leave</h3>
@@ -93,6 +92,11 @@ const LeaveRequestForm = () => {
                 <label>Reason for Leave</label>
                 <textarea value={reason} onChange={(e) => setReason(e.target.value)} rows="4" required />
             </div>
+
+            {/* Display status message above submit button */}
+            {statusMessage && (
+                <div className="status-message">{statusMessage}</div>
+            )}
 
             <button type="submit" className="submit-button">Submit</button>
         </form>
