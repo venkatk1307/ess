@@ -17,26 +17,25 @@ const Login = ({ setIsAuthenticated }) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const loginData = {
-            email: email,
-            password: password,
-        };
-
+        const loginData = { email, password };
         setLoading(true);
 
         try {
             const response = await axios.post('http://localhost:8081/api/auth/login', loginData);
 
             if (response.status === 200) {
+                // Save token to localStorage
+                localStorage.setItem('token', response.data.token);
                 setIsAuthenticated(true);
-                navigate('/timesheet');
+
+                // Redirect to leave-request page
+                navigate('/leave-request');
             }
         } catch (error) {
-            if (error.response && error.response.status === 401) {
-                setError('Invalid email or password');
-            } else {
-                setError('Something went wrong, please try again');
-            }
+            setError(error.response && error.response.status === 401
+                ? 'Invalid email or password'
+                : 'Something went wrong, please try again'
+            );
         } finally {
             setLoading(false);
         }
@@ -47,11 +46,9 @@ const Login = ({ setIsAuthenticated }) => {
             <h2 className="form-title">Login</h2>
             <form className="login-form" onSubmit={handleSubmit}>
                 <div className="input-wrapper">
-
                     <i className="fa-regular fa-envelope"></i>
                     <input
                         type="email"
-                        id="email"
                         placeholder="Enter your email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -60,11 +57,9 @@ const Login = ({ setIsAuthenticated }) => {
                     />
                 </div>
                 <div className="input-wrapper">
-
                     <i className="fas fa-lock"></i>
                     <input
                         type="password"
-                        id="password"
                         placeholder="Enter your password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}

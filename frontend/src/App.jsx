@@ -37,7 +37,7 @@ const App = () => {
             path="/"
             element={
               isAuthenticated ? (
-                <Navigate to="/timesheet" />
+                <Navigate to="/leave-request" />
               ) : (
                 <Login setIsAuthenticated={setIsAuthenticated} />
               )
