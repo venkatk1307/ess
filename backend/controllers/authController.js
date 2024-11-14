@@ -1,3 +1,5 @@
+// controllers/authController.js
+const db = require('../config/db');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 require('dotenv').config();

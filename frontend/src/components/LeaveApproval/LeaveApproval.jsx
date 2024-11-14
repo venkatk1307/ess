@@ -1,3 +1,5 @@
+// frontend/src/components/LeaveApproval/LeaveApproval.jsx
+
 import React, { useState } from 'react';
 import './LeaveApproval.css';
 

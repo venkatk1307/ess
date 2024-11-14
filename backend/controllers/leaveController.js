@@ -1,3 +1,5 @@
+// controllers/leaveController.js
+
 const authenticate = require('../middleware/authMiddleware');
 const leaveRequestModel = require('../models/leaveModel');
 
