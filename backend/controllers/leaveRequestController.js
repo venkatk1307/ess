@@ -1,7 +1,7 @@
-// controllers/leaveController.js
+// controllers/leaveRequestController.js
 
 const authenticate = require('../middleware/authMiddleware');
-const leaveRequestModel = require('../models/leaveModel');
+const leaveRequestModel = require('../models/leaveRequestModel');
 
 exports.createLeaveRequest = (req, res) => {
     const { leaveType, from_date, to_date, reason } = req.body;
