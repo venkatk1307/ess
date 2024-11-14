@@ -1,4 +1,4 @@
-// models/userModel.js
+// models/authModel.js
 
 const db = require('../config/db');
 
